@@ -27,6 +27,25 @@ function context_admin_exclude_form_alter(&$form, $form_state, $form_id) {
         '#markup' => implode("<br/>", context_admin_exclude_get_admin_paths()),
         '#suffix' => '</div>',
       );
-      break;  }
+      break;
+    case 'ctools_export_ui_edit_item_form':
+      // Context edit page.
+      $default = FALSE;
+      if (isset($form['info']['name']['#value'])) {
+        $contexts = variable_get('context_admin_exclude_exception', array());
+        if (isset($contexts[$form['info']['name']['#value']])) {
+          $default = $contexts[$form['info']['name']['#value']];
+        }
+      }
+      $form['context_admin_exclude_exception'] = array(
+          '#type' => 'checkbox',
+          '#title' => t('Execute this context on Admin paths'),
+          '#default_value' => $default,
+          '#description' => t('If you tick this box, this context will be executed on admin paths. <a href="/admin/structure/context/settings">See list of admin paths</a>.'),
+          '#weight' => 0,
+      );
+      $form['#submit'][] = 'context_admin_exclude_save_context';
+      break;
+  }
 }
 
