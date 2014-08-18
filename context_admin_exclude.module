@@ -92,3 +92,35 @@ function context_admin_exclude_context_load_alter(&$context) {
 function hook_context_admin_exclude_admin_paths(&$paths) {
 
 }
+
+/**
+ * Generate a list of admin paths to be excluded.
+ */
+function context_admin_exclude_get_admin_paths() {
+  $paths = &drupal_static(__FUNCTION__, array());
+  $patterns = array();
+
+  if (empty($paths)) {
+    $paths = module_invoke_all('admin_paths');
+    drupal_alter('admin_paths', $paths);
+
+    $paths['admin'] = TRUE;
+    $paths['admin/*'] = TRUE;
+    $paths['system/ajax'] = TRUE;
+    $paths['system/ajax/*'] = TRUE;
+    $paths['media/browser'] = TRUE;
+    $paths['media/browser/*'] = TRUE;
+    $paths['*/edit'] = TRUE;
+    $paths['*/autocomplete'] = TRUE;
+
+    drupal_alter('context_admin_exclude_admin_paths', $paths);
+  }
+
+  foreach ($paths as $path => $enabled) {
+    if ($enabled) {
+      $patterns[] = $path;
+    }
+  }
+
+  return $patterns;
+}
