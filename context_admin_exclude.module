@@ -49,3 +49,18 @@ function context_admin_exclude_form_alter(&$form, $form_state, $form_id) {
   }
 }
 
+/**
+ * Save the configuration for a individual context.
+ */
+function context_admin_exclude_save_context(&$form, &$form_state) {
+  // Get list of stored settings.
+  $contexts = variable_get('context_admin_exclude_exception', array());
+  // Save setting for this context.
+  $context_name = $form['info']['name']['#value'];
+  $contexts[$context_name] = $form_state['values']['context_admin_exclude_exception'];
+  if ($contexts[$context_name] == FALSE) {
+    unset ($contexts[$context_name]);
+  }
+  // save list
+  variable_set('context_admin_exclude_exception', $contexts);
+}
