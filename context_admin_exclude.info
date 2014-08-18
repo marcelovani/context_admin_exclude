@@ -1,0 +1,6 @@
+name = Context Admin Exclude
+description = "Prevent sitewide contexts running on Admin paths"
+core = 7.x
+package = Context
+dependencies[] = context
+files[] = context_admin_exclude.module
