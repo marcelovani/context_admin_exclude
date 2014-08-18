@@ -64,3 +64,31 @@ function context_admin_exclude_save_context(&$form, &$form_state) {
   // save list
   variable_set('context_admin_exclude_exception', $contexts);
 }
+
+/**
+ * Implements hook_context_load_alter().
+ */
+function context_admin_exclude_context_load_alter(&$context) {
+  // Get list of stored settings.
+  $exception_list = variable_get('context_admin_exclude_exception', array());
+
+  // Check if this context is allowed to be executed in admin paths.
+  if (isset($exception_list[$context->name]) && $exception_list[$context->name] == TRUE) {
+    // Allow the context to be executed normally.
+  }
+  else {
+    // Do not allow the context to be executed in admin paths.
+    if (drupal_match_path(current_path(), implode("\r\n", context_admin_exclude_get_admin_paths()))) {
+      // Clear the context.
+      $context = new StdClass();
+      $context->name = NULL;
+    }
+  }
+}
+
+/**
+ * Implements hook_context_admin_exclude_admin_paths().
+ */
+function hook_context_admin_exclude_admin_paths(&$paths) {
+
+}
