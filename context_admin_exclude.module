@@ -1,0 +1,32 @@
+<?php
+/**
+ * @file
+ * Module for Context Admin Exclude.
+ */
+
+/**
+ * Implements hook_form_alter().
+ */
+function context_admin_exclude_form_alter(&$form, $form_state, $form_id) {
+  switch ($form_id) {
+    case 'context_ui_settings':
+      // Context settings page.
+      $form['context_admin_exclude_exception'] = array(
+          '#type' => 'fieldset',
+          '#title' => t('Context Admin Exclude'),
+        );
+      $form['context_admin_exclude_exception']['description'] = array(
+        '#markup' => t('Out of the box, contexts set to display Sitewide without specific URLs will get executed on every
+        page, including admin pages. Sometimes the context doesn\'t really need to be executed on admin pages, such as
+        node/add. <br/>These contexts cause Drupal to bootstrap and do some work that is not really needed. If you want
+        to change the list below, you can implement the hook_context_admin_exclude_admin_paths_alter(). <br/>If you need
+        a certain context to run on admin paths, you can edit the context and tick "Execute this context on Admin paths".'),
+      );
+      $form['context_admin_exclude_exception']['paths'] = array(
+        '#prefix' => '<div><p><strong>' . t('Contexts will not be executed on the following paths:') . '</strong></p>',
+        '#markup' => implode("<br/>", context_admin_exclude_get_admin_paths()),
+        '#suffix' => '</div>',
+      );
+      break;  }
+}
+
