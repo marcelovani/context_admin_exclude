@@ -112,6 +112,7 @@ function context_admin_exclude_get_admin_paths() {
     $paths['media/browser/*'] = TRUE;
     $paths['*/edit'] = TRUE;
     $paths['*/autocomplete'] = TRUE;
+    $paths['*/files/*'] = TRUE;
 
     drupal_alter('context_admin_exclude_admin_paths', $paths);
   }
