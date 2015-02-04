@@ -8,6 +8,9 @@
  * Implements hook_form_alter().
  */
 function context_admin_exclude_form_alter(&$form, $form_state, $form_id) {
+  if (arg(0) != 'admin' || arg(1) != 'structure' || arg(2) != 'context') {
+    return;
+  }
   switch ($form_id) {
     case 'context_ui_settings':
       // Context settings page.
